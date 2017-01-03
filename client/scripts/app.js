@@ -1,5 +1,5 @@
 // YOUR CODE HERE:
-
+var sheet;
 var escapeHtml = function(str) {
   var div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
@@ -19,6 +19,11 @@ class Client {
     $('.submit').on('click', this.handleSubmit.bind(this));
     $('#roomSelect').on('change', this.changeRoom.bind(this));
     $('#chats').on('click', '.username', this.handleUsernameClick);
+    $('#message').keyup(function(event) {
+      if (event.keyCode === 13) {
+        $('.submit').click();
+      }
+    });
     this.fetchLatest();
     setInterval(this.fetchLatest.bind(this), 1000);
     this.fetchRoomList();
@@ -119,7 +124,7 @@ class Client {
 
 
   renderMessage(message) {
-    $('#chats').append(`<div class="chat"><div class="username">Username:${escapeHtml(message.username)}</div><div class="message">Message:${escapeHtml(message.text)}</div></div>`);
+    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)}"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">Message:${escapeHtml(message.text)}</div></div>`);
   }
 
   renderRoom(room) {
@@ -156,8 +161,20 @@ class Client {
   }
 
 
-  handleUsernameClick () {
-
+  handleUsernameClick (event) {
+    console.log(event);
+    console.log($(this).text());
+    //$('.' + $(this).text()).css({'color': '#fff', 'background-color': '#0090da'});
+    var ruleExists = false; 
+    for (var i = 0; i < sheet.cssRules.length; i++) {
+      if (sheet.cssRules[i].selectorText === `.${$(this).text()}`) {        
+        ruleExists = true; //indicates the rule already exists meaning we have already clicked on the friend once
+        sheet.deleteRule (i);
+      }
+    }  
+    if (!ruleExists) {
+      sheet.insertRule(`.${$(this).text()} { color: #fff ; background-color: #0090da}`, sheet.cssRules.length);
+    }
   }
 
   handleSubmit () {  
@@ -176,7 +193,28 @@ class Client {
   }
 }
 
+
+
+
 $(document).ready(function() {
+  //sheet = document.styleSheets[0];
+
+  sheet = (function() {
+  // Create the <style> tag
+    var style = document.createElement('style');
+
+    // Add a media (and/or media query) here if you'd like!
+    // style.setAttribute("media", "screen")
+    // style.setAttribute("media", "only screen and (max-width : 1024px)")
+
+    // WebKit hack :(
+    style.appendChild(document.createTextNode(''));
+
+    // Add the <style> element to the page
+    document.head.appendChild(style);
+
+    return style.sheet;
+  })();
   var app = new Client();
   app.init();  
 });
