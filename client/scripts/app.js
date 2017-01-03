@@ -3,7 +3,7 @@ var sheet;
 var escapeHtml = function(str) {
   var div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
-  return div.innerHTML.replace(/'/g, '"');
+  return div.innerHTML.replace(/'/g, '\'');
 };
 
 class Client {
@@ -13,11 +13,13 @@ class Client {
     this.lastTimeStamp = undefined;
     this.currentRoom = 'lobby';
     this.roomList = [];
+    this.newRoom = undefined;
   }
 
   init () {
     $('.submit').on('click', this.handleSubmit.bind(this));
     $('#roomSelect').on('change', this.changeRoom.bind(this));
+    $('#createRoom').on('click', this.createRoom.bind(this));
     $('#chats').on('click', '.username', this.handleUsernameClick);
     $('#message').keyup(function(event) {
       if (event.keyCode === 13) {
@@ -124,12 +126,13 @@ class Client {
 
 
   renderMessage(message) {
-    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)}"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">Message:${escapeHtml(message.text)}</div></div>`);
+    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)}"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">${escapeHtml(message.text)}</div></div>`);
   }
 
   renderRoom(room) {
     $('#roomSelect').append(`<option value=${room}>${room}</option>`);
   }
+
   updateRoomList (data) {
     var renderRoomFunc = this.renderRoom;
     var roomListArr = this.roomList;
@@ -143,7 +146,20 @@ class Client {
       // }
     });
     this.roomList = roomListArr;
-
+    if (this.newRoom) {
+      if (this.roomList.includes(this.newRoom)) {
+        var sel = document.getElementById('roomSelect');
+        var opts = sel.options;
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].value === this.newRoom) {
+            sel.selectedIndex = i;
+            break;
+          }
+        }
+        this.changeRoom();
+        this.newRoom = undefined;
+      }
+    }
   }
 
   displayMessages (data) {
@@ -162,9 +178,6 @@ class Client {
 
 
   handleUsernameClick (event) {
-    console.log(event);
-    console.log($(this).text());
-    //$('.' + $(this).text()).css({'color': '#fff', 'background-color': '#0090da'});
     var ruleExists = false; 
     for (var i = 0; i < sheet.cssRules.length; i++) {
       if (sheet.cssRules[i].selectorText === `.${$(this).text()}`) {        
@@ -191,6 +204,17 @@ class Client {
     this.lastTimeStamp = undefined;
     this.clearMessages();
   }
+
+  createRoom () {
+    var room = prompt('Enter room name') || 'new room';
+    var message = {
+      username: window.location.search.split('=')[1],
+      roomname: room,
+      text: `I created new room: ${room}`
+    }; 
+    this.newRoom = room;
+    this.send(message);
+  }
 }
 
 
@@ -202,10 +226,6 @@ $(document).ready(function() {
   sheet = (function() {
   // Create the <style> tag
     var style = document.createElement('style');
-
-    // Add a media (and/or media query) here if you'd like!
-    // style.setAttribute("media", "screen")
-    // style.setAttribute("media", "only screen and (max-width : 1024px)")
 
     // WebKit hack :(
     style.appendChild(document.createTextNode(''));
