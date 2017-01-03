@@ -50,7 +50,9 @@ class Client {
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'GET',
-      data: `where={"updatedAt":{"$gt":"${time}"}},order:"updatedAt"`,
+      data: {'where': `{"updatedAt":{"$gt":"${time}"}}`, 'order': 'updatedAt'},
+
+      // data: {"order":"-createdAt", "group": "chatroom"},
       contentType: 'application/json',
       success: this.displayMessages.bind(this),
       error: function (data) {
@@ -73,7 +75,12 @@ class Client {
   }
 
   displayMessages (data) {
-
+    console.log(data);
+    var renderFunc = this.renderMessage;
+    _.each(data.results, function (item) {
+      renderFunc(item);
+    });
+    this.lastTimeStamp = data.results[data.results.length - 1].updatedAt;
   }
 
 
