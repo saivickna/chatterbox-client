@@ -3,12 +3,14 @@ class Client {
 
   constructor() {
     this.server = 'https://api.parse.com/1/classes/messages';
-    this.lastTimeStamp = '';
+    this.lastTimeStamp = undefined;
   }
 
   init () {
     $('.submit').on('submit', this.handleSubmit);
     $('#chats').on('click', '.username', this.handleUsernameClick);
+    this.fetchLatest();
+    setInterval(this.fetchLatest.bind(this), 1000);
   }
 
   send (message) {
@@ -45,12 +47,13 @@ class Client {
     });
   }
 
-  fetchLatest (time) {
+  fetchLatest () {
+    var time = this.lastTimeStamp;
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'GET',
-      data: {'where': `{"updatedAt":{"$gt":"${time}"}}`, 'order': 'updatedAt'},
+      data: time ? {'where': `{"updatedAt":{"$gt":"${time}"}}`, 'order': 'updatedAt'} : {'order': '-updatedAt'}, 
 
       // data: {"order":"-createdAt", "group": "chatroom"},
       contentType: 'application/json',
@@ -75,12 +78,17 @@ class Client {
   }
 
   displayMessages (data) {
-    console.log(data);
     var renderFunc = this.renderMessage;
+    if (!this.lastTimeStamp) { // first time we are retrieving messages
+      data.results.reverse();  // messages are in reverse chronological order, we want chronological
+    }
+    // console.log(data);
     _.each(data.results, function (item) {
       renderFunc(item);
     });
-    this.lastTimeStamp = data.results[data.results.length - 1].updatedAt;
+    if (data.results.length > 0) {
+      this.lastTimeStamp = data.results[data.results.length - 1].updatedAt;
+    }
   }
 
 
@@ -95,6 +103,8 @@ class Client {
 }
 
 var app = new Client();
-//app.fetch();
-app.fetchLatest('2016-03-08T23:26:17.429Z');
-//app.fetchRoom('jamesaitest');
+
+app.init();
+// app.fetch();
+// app.fetchLatest('2016-03-08T23:26:17.429Z');
+// app.fetchRoom('jamesaitest');
