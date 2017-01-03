@@ -40,7 +40,7 @@ describe('chatterbox', function() {
         var message = {
           username: 'Mel Brooks',
           text: 'It\'s good to be the king',
-          roomname: 'jamesaitest'
+          roomname: 'lobby'
         };
 
         app.send(message);
