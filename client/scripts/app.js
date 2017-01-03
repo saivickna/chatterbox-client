@@ -14,7 +14,7 @@ class Client {
   }
 
   init () {
-    $('.submit').on('submit', this.handleSubmit);
+    $('.submit').on('click', this.handleSubmit.bind(this));
     $('#chats').on('click', '.username', this.handleUsernameClick);
     this.fetchLatest();
     setInterval(this.fetchLatest.bind(this), 1000);
@@ -44,7 +44,6 @@ class Client {
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
-        console.log(data);
         console.log('chatterbox: Message received');
       },
       error: function (data) {
@@ -111,15 +110,17 @@ class Client {
       roomname: 'lobby',
       text: $('#message').val()
     }; 
-
     this.send(message);
   }
 
 }
 
-var app = new Client();
+$(document).ready(function() {
+  var app = new Client();
+  app.init();  
+});
 
-app.init();
+
 // app.fetch();
 // app.fetchLatest('2016-03-08T23:26:17.429Z');
 // app.fetchRoom('jamesaitest');
