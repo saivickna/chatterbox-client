@@ -3,6 +3,7 @@ class Client {
 
   constructor() {
     this.server = 'https://api.parse.com/1/classes/messages';
+    this.lastTimeStamp = '';
   }
 
   init () {
@@ -34,8 +35,24 @@ class Client {
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
+        console.log(data);
         console.log('chatterbox: Message received');
       },
+      error: function (data) {
+        // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
+        console.error('chatterbox: Failed to receive message', data);
+      }
+    });
+  }
+
+  fetchLatest (time) {
+    $.ajax({
+      // This is the url you should use to communicate with the parse API server.
+      url: this.server,
+      type: 'GET',
+      data: `where={"updatedAt":{"$gt":"${time}"}},order:"updatedAt"`,
+      contentType: 'application/json',
+      success: this.displayMessages.bind(this),
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
         console.error('chatterbox: Failed to receive message', data);
@@ -55,6 +72,11 @@ class Client {
     $('#roomSelect').append(`<option value=${room}>${room}</option>`);
   }
 
+  displayMessages (data) {
+
+  }
+
+
   handleUsernameClick () {
 
   }
@@ -66,3 +88,6 @@ class Client {
 }
 
 var app = new Client();
+//app.fetch();
+app.fetchLatest('2016-03-08T23:26:17.429Z');
+//app.fetchRoom('jamesaitest');
