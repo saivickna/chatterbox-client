@@ -23,7 +23,7 @@ body {
     padding: 0px 20px 0px 20px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px; 
-    height: 400px;
+    height: 600px;
     overflow-y: scroll;
 }
 
@@ -84,7 +84,7 @@ form input[type=text] {
 
 .chat {
     padding: 5px;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
     border-radius: 5px;
     background-color: #eee;
     width:auto;
@@ -95,7 +95,10 @@ form input[type=text] {
 }
 
 .chat:hover {
-    background-color: #ddd;
+    /*background-color: #ddd;*/
+    color: #31708f;
+    background-color: #d9edf7;
+    background-position: 0 -15px;
 }
 
 .spinner {

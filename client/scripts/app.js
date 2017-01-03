@@ -12,7 +12,7 @@ class Client {
     this.server = 'https://api.parse.com/1/classes/messages';
     this.lastTimeStamp = undefined;
     this.currentRoom = 'lobby';
-    this.roomList = [];
+    this.roomList = [this.currentRoom];
     this.newRoom = undefined;
   }
 
@@ -26,6 +26,7 @@ class Client {
         $('.submit').click();
       }
     });
+    this.changeRoom();
     this.fetchLatest();
     setInterval(this.fetchLatest.bind(this), 1000);
     this.fetchRoomList();
@@ -126,11 +127,11 @@ class Client {
 
 
   renderMessage(message) {
-    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)}"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">${escapeHtml(message.text)}</div></div>`);
+    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)} alert alert-warning"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">${escapeHtml(message.text)}</div></div>`);
   }
 
   renderRoom(room) {
-    $('#roomSelect').append(`<option value=${room}>${room}</option>`);
+    $('#roomSelect').append(`<option value="${room}">${room}</option>`);
   }
 
   updateRoomList (data) {
@@ -186,7 +187,8 @@ class Client {
       }
     }  
     if (!ruleExists) {
-      sheet.insertRule(`.${$(this).text()} { color: #fff ; background-color: #0090da}`, sheet.cssRules.length);
+      sheet.insertRule(`.${$(this).text()} { color: #3c763d; background-color: #dff0d8; border-color: #b2dba1}`, sheet.cssRules.length);
+      // sheet.insertRule(`.${$(this).text()} { .alert-success }`, sheet.cssRules.length);
     }
   }
 
@@ -201,6 +203,7 @@ class Client {
 
   changeRoom () {
     this.currentRoom = $('#roomSelect').val();
+    $('.roomHeader').text(escapeHtml(this.currentRoom));
     this.lastTimeStamp = undefined;
     this.clearMessages();
   }
@@ -210,7 +213,7 @@ class Client {
     var message = {
       username: window.location.search.split('=')[1],
       roomname: room,
-      text: `I created new room: ${room}`
+      text: `I created a new room: ${room}`
     }; 
     this.newRoom = room;
     this.send(message);
