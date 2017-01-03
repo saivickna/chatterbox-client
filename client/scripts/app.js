@@ -12,6 +12,7 @@ class Client {
     this.server = 'https://api.parse.com/1/classes/messages';
     this.lastTimeStamp = undefined;
     this.currentRoom = 'lobby';
+    this.roomList = [];
   }
 
   init () {
@@ -34,6 +35,7 @@ class Client {
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function (data) {
+        $('#message').val('');
         console.log('chatterbox: Message sent');
       },
       error: function (data) {
@@ -81,7 +83,7 @@ class Client {
         // This is the url you should use to communicate with the parse API server.
         url: this.server,
         type: 'GET',
-        data: {'keys': 'roomname', 'order': 'updatedAt', 'limit': '1000'}, 
+        data: {'keys': 'roomname', 'order': '-updatedAt', 'limit': '1000'}, 
         contentType: 'application/json',
         success: this.updateRoomList.bind(this),
         error: function (data) {
@@ -125,12 +127,17 @@ class Client {
   }
   updateRoomList (data) {
     var renderRoomFunc = this.renderRoom;
+    var roomListArr = this.roomList;
     _.each(data.results, function (item) {
-      if ($(`#roomSelect option:contains('${escapeHtml(item.roomname)}')`).length === 0) {
+      if (!roomListArr.includes(escapeHtml(item.roomname))) {
+        roomListArr.push(escapeHtml(item.roomname));
         renderRoomFunc(escapeHtml(item.roomname));
       }
+      // if ($(`#roomSelect option:contains('${escapeHtml(item.roomname)}')`).length === 0) {
+        
+      // }
     });
-
+    this.roomList = roomListArr;
 
   }
 

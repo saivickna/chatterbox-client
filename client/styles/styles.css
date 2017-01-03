@@ -5,7 +5,7 @@ body {
     font-family: arial, sans-serif;
 }
 
-#main, #chats {
+#main,  {
     width: 500px;
     margin: auto;
     text-align: left;
@@ -13,6 +13,18 @@ body {
     padding: 50px 60px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
+}
+
+#chats {
+    width: 99%;
+    /*margin: auto;*/
+    text-align: left;
+    background: white;
+    padding: 0px 20px 0px 20px;
+    border: solid #ddd;
+    border-width: 0 1px 1px 1px; 
+    height: 400px;
+    overflow-y: scroll;
 }
 
 #main h1 {
@@ -46,6 +58,10 @@ body {
     line-height: 13px;
 }
 
+#roomSelect {
+    margin-bottom: 20px;
+}
+
 form {
     padding: 20px;
     padding-left: 0;
@@ -58,15 +74,20 @@ form input[type=text] {
     font-size: 12px;
     padding: 5px;
 }
-#chats {
-    height: 400px;
-    overflow: scroll;    
+#send {
+    margin-top: 20px;
+}
+
+#message {
+    width: 200px;
 }
 
 .chat {
     padding: 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
     background-color: #eee;
+    width:auto;
 }
 
 .chat .username {
