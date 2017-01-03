@@ -18,6 +18,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "jsesc": "~2.4.0"
+  }
 }
-

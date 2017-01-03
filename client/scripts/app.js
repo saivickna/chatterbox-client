@@ -1,4 +1,11 @@
 // YOUR CODE HERE:
+
+var escapeHtml = function(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+};
+
 class Client {
 
   constructor() {
@@ -69,8 +76,9 @@ class Client {
     $('#chats').empty();
   }
 
+
   renderMessage(message) {
-    $('#chats').append(`<div class="chat"><div class="username">Username:${message.username}</div><div class="message">Message:${message.text}</div></div>`);
+    $('#chats').append(`<div class="chat"><div class="username">Username:${escapeHtml(message.username)}</div><div class="message">Message:${escapeHtml(message.text)}</div></div>`);
   }
 
   renderRoom(room) {
@@ -84,11 +92,12 @@ class Client {
     }
     // console.log(data);
     _.each(data.results, function (item) {
-      renderFunc(item);
+      renderFunc(item);  
     });
     if (data.results.length > 0) {
       this.lastTimeStamp = data.results[data.results.length - 1].updatedAt;
     }
+    // console.log(this.lastTimeStamp);
   }
 
 
@@ -96,8 +105,14 @@ class Client {
 
   }
 
-  handleSubmit () {
+  handleSubmit () {  
+    var message = {
+      username: window.location.search.split('=')[1],
+      roomname: 'lobby',
+      text: $('#message').val()
+    }; 
 
+    this.send(message);
   }
 
 }
