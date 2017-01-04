@@ -51,7 +51,9 @@ body {
     float: right;
     cursor: pointer;
 }
-
+.messageDate {
+    float: right;
+}
 .roomTab {
     border: 1px solid #ddd !important;
     border-bottom-color: transparent !important;

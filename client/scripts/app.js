@@ -134,7 +134,11 @@ class Client {
 
 
   renderMessage(message) {
-    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)} alert alert-warning"><a href="#" class="username">${escapeHtml(message.username)}</a><div class="message">${escapeHtml(message.text)}</div></div>`);
+    // console.log(message.updatedAt);
+    var date = new Date(Date.parse(message.updatedAt));
+    var dateString = date.toString().substring(4, 24);
+    // console.log(dateString);
+    var test = $('#chats').append(`<div class="chat ${escapeHtml(message.username)} alert alert-warning"><a href="#" class="username">${escapeHtml(message.username)}</a><span class="messageDate">${dateString}</span><div class="message">${escapeHtml(message.text)}</div></div>`);
   }
 
   renderRoom(room) {
