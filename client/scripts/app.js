@@ -21,6 +21,14 @@ class Client {
     $('#roomSelect').on('change', this.changeRoom.bind(this));
     $('#createRoom').on('click', this.createRoom.bind(this));
     $('#chats').on('click', '.username', this.handleUsernameClick);
+    var thisApp = this;
+    $('#tabList').on('click', '.roomTab', function () {
+      thisApp.changeTab.call(this, thisApp); 
+    });
+
+    $('#addTab').on('click', function () {
+      thisApp.addTab.call(this, thisApp); 
+    });
     $('#message').keyup(function(event) {
       if (event.keyCode === 13) {
         $('.submit').click();
@@ -44,7 +52,6 @@ class Client {
       contentType: 'application/json',
       success: function (data) {
         $('#message').val('');
-        console.log('chatterbox: Message sent');
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -60,7 +67,6 @@ class Client {
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
-        console.log('chatterbox: Message received');
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -203,7 +209,7 @@ class Client {
 
   changeRoom () {
     this.currentRoom = $('#roomSelect').val();
-    $('.roomHeader').text(escapeHtml(this.currentRoom));
+    $('.active a').text(escapeHtml(this.currentRoom));
     this.lastTimeStamp = undefined;
     this.clearMessages();
   }
@@ -217,6 +223,28 @@ class Client {
     }; 
     this.newRoom = room;
     this.send(message);
+  }
+
+  addTab(thisApp) {
+    $('.active').removeClass('active');
+    $(this).before(`<li role="presentation" class="active roomTab"><a href="#">${thisApp.currentRoom}</a></li>`);
+  }
+
+  // changeDropDrop (value)
+  changeTab(thisApp) {
+    $('.active').removeClass('active');
+    //this.currentRoom = $(this).text();
+    var sel = document.getElementById('roomSelect');
+    var opts = sel.options;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === $(this).find('a').text()) {
+        sel.selectedIndex = i;
+        break;
+      }
+    }
+    thisApp.changeRoom();
+    $(this).addClass('active');
+    // $(this).before(`<li role="presentation" class="active roomTab">${this.currentRoom}</li>`);
   }
 }
 

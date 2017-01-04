@@ -27,6 +27,19 @@ body {
     overflow-y: scroll;
 }
 
+#chatWindow {
+    margin-top: 5px;
+}
+.glyphicon {
+    top: 18px !important;
+}
+
+#addTab {
+    display: inline;
+    float: right;
+    cursor: pointer;
+}
+
 #main h1 {
     margin-top: 0;
     font-size: 35px;
@@ -75,15 +88,28 @@ form input[type=text] {
     padding: 5px;
 }
 #send {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
+    width: 100%;
 }
 
 #message {
-    width: 200px;
+    width: 90%;
+    height: 50px;
+    font-size: 16px;
+    float: left;
+}
+
+.submit {
+    width: 10%;
+    height: 50px;
+    font-size: 25px !important;
+    float: right;
 }
 
 .chat {
-    padding: 5px;
+    padding: 5px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
     /*margin-bottom: 5px;*/
     border-radius: 5px;
     background-color: #eee;
@@ -114,5 +140,15 @@ form input[type=text] {
 .friend {
     color: #fff;
     background-color: #0090da;
+}
+
+#roomSelect {
+    font-size: 20px;   
+    height: 30px;
+    vertical-align: top;
+}
+
+#createRoom {
+    vertical-align: top;
 }
 
