@@ -25,6 +25,7 @@ class Client {
     $('#tabList').on('click', '.roomTab', function () {
       thisApp.changeTab.call(this, thisApp); 
     });
+    $('#tabList').on('click', '.glyphicon-remove-circle', this.removeTab);
 
     $('#addTab').on('click', function () {
       thisApp.addTab.call(this, thisApp); 
@@ -227,7 +228,7 @@ class Client {
 
   addTab(thisApp) {
     $('.active').removeClass('active');
-    $(this).before(`<li role="presentation" class="active roomTab"><a href="#">${thisApp.currentRoom}</a></li>`);
+    $(this).before(`<li role="presentation" class="active roomTab"><a href="#">${thisApp.currentRoom}</a><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></li>`);
   }
 
   // changeDropDrop (value)
@@ -245,6 +246,24 @@ class Client {
     thisApp.changeRoom();
     $(this).addClass('active');
     // $(this).before(`<li role="presentation" class="active roomTab">${this.currentRoom}</li>`);
+  }
+
+  removeTab(event) {
+    event.stopPropagation();
+    var tabList = $(this).closest('ul');
+    if (tabList.children().length > 2) {
+      var closest = $(this).closest('li');
+      if (closest.hasClass('active')) {
+        closest.remove();
+        // console.log($('roomTab').first());
+        $('.roomTab').first().click();
+      } else {
+        closest.remove();
+      }
+
+
+    }
+
   }
 }
 

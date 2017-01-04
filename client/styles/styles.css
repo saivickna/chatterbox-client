@@ -30,9 +30,21 @@ body {
 #chatWindow {
     margin-top: 5px;
 }
-.glyphicon {
-    top: 18px !important;
+.glyphicon-plus {
+    top: 12px !important;
 }
+
+.glyphicon-remove-circle {
+    display: inline;
+    float: right;
+    margin-top: 3px;
+    cursor: pointer;
+}
+.glyphicon-remove-circle:hover {
+    color: red;
+}
+
+
 
 #addTab {
     display: inline;
@@ -40,6 +52,26 @@ body {
     cursor: pointer;
 }
 
+.roomTab {
+    border: 1px solid #ddd !important;
+    border-bottom-color: transparent !important;
+    border-radius: 4px 4px 0 0 !important;
+    padding: 5px 5px 5px 5px !important;
+    width: auto !important;
+}
+
+.active {
+    border: 2px solid #bbb !important;
+    border-bottom-color: transparent !important;
+}
+
+.roomTab a {
+    display: inline !important;
+    float: left !important;
+    margin-right: 10px !important;
+    border: none !important;
+    padding: 0px !important;
+}
 #main h1 {
     margin-top: 0;
     font-size: 35px;
